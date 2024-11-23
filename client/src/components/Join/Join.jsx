@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import io from 'socket.io-client';
 import '../../output.css';
 
@@ -11,8 +11,13 @@ export default function Join({ setChatVisibility, setSocket }) {
     const username = usernameRef.current.value;
     if (!username.trim()) return;
 
-    // Cria e emite o nome de usuário 
-    const socket = io('https://chat-suporte-v2.vercel.app/');
+    // Verifica se estamos em ambiente de produção ou desenvolvimento
+    const socketUrl = process.env.NODE_ENV === 'production'
+      ? 'https://chat-suporte-v2.vercel.app' // Produção na Vercel
+      : 'http://localhost:3001'; // Desenvolvimento local
+
+    // Cria e emite o nome de usuário
+    const socket = io(socketUrl);
     socket.emit('set_username', username);
     setSocket(socket);
     setChatVisibility(true);
