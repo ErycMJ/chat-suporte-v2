@@ -2,7 +2,7 @@ const app = require('express')()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server, {cors: {origin: 'https://chat-suporte-rose.vercel.app/'}})
 
-const PORT = 3001
+const port = process.env.PORT || 3001
 
 io.on('connection', socket => {
     console.log('Usuário conectado!', socket.id);
@@ -24,4 +24,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(PORT, () => console.log('Server running...'))
+server.listen(port, () => console.log('Server running...'))
