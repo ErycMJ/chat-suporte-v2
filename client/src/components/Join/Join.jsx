@@ -11,7 +11,7 @@ export default function Join({ setChatVisibility, setSocket }) {
     const username = usernameRef.current.value;
     if (!username.trim()) return;
 
-    // Cria e emite o nome de usuário
+    // Cria e emite o nome de usuário 
     const socket = io('https://chat-suporte-v2.vercel.app/');
     socket.emit('set_username', username);
     setSocket(socket);
