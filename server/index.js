@@ -6,13 +6,16 @@ const socketIo = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 
+// Configuração do CORS para permitir múltiplas origens
+const allowedOrigins = [
+  'https://chat-suporte-rose.vercel.app', // Ambiente de produção
+  'http://localhost:5173'                // Ambiente de desenvolvimento
+];
+
 // Configuração do Socket.IO com CORS flexível
 const io = socketIo(server, {
   cors: {
-    origin: [
-      'https://chat-suporte-rose.vercel.app', // Ambiente de produção
-      'http://localhost:5173'                // Ambiente de desenvolvimento
-    ],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
@@ -22,6 +25,9 @@ const io = socketIo(server, {
 // Porta padrão ou variável de ambiente
 const port = process.env.PORT || 3001;
 
+// Middleware para servir arquivos estáticos (caso haja necessidade no futuro)
+app.use(express.static('public'));
+
 // Gerenciamento de conexões
 io.on('connection', socket => {
   console.log('Usuário conectado!', socket.id);
@@ -29,6 +35,7 @@ io.on('connection', socket => {
   // Evento de desconexão
   socket.on('disconnect', reason => {
     console.log('Usuário desconectado!', socket.id);
+    // Limpeza de recursos, caso necessário (ex: timers, etc.)
   });
 
   // Define o nome de usuário para o socket

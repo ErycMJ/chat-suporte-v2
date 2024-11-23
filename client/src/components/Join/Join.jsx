@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import '../../output.css';
 
@@ -6,11 +6,13 @@ export default function Join({ setChatVisibility, setSocket }) {
   const usernameRef = useRef();
   const [darkMode, setDarkMode] = useState(false);
 
-  const handleSubmit = async () => {
+  // Função para lidar com o envio do formulário
+  const handleSubmit = () => {
     const username = usernameRef.current.value;
     if (!username.trim()) return;
 
-    const socket = await io.connect('https://chat-suporte-v2.vercel.app/');
+    // Cria e emite o nome de usuário
+    const socket = io('https://chat-suporte-v2.vercel.app/');
     socket.emit('set_username', username);
     setSocket(socket);
     setChatVisibility(true);
@@ -18,7 +20,6 @@ export default function Join({ setChatVisibility, setSocket }) {
 
   return (
     <div
-    
       className={`flex flex-col items-center justify-center min-h-screen p-4 transition-colors ${
         darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'
       }`}
@@ -39,7 +40,7 @@ export default function Join({ setChatVisibility, setSocket }) {
           focus:ring-2 focus:ring-blue-400"
       />
       <button
-        onClick={() => handleSubmit()}
+        onClick={handleSubmit}
         className="px-6 py-2 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600"
       >
         Entrar
